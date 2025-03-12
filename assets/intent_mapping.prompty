@@ -120,6 +120,32 @@ Respond with:
     "search_query": "surface hole actual product Alkapam A1103D December 13 2013"
 }
 
+Example 9:
+With a conversation like below:
+```
+ - user: How many wells are near [LSD] ?
+ - assistant: The following wells [LSD1,LSD2,LSD3] are near [LSD]
+
+```
+Respond with:
+{
+    "intent": "The user wants to know which wells are near the provided [LSD]",
+    "search_query": "all wells near the provided [LSD]"
+}
+
+Example 10:
+With a conversation like below:
+```
+ - user: show me the files related to FALHER MEMBER formation? ?
+ - assistant: The user wants to see documents that have FALHER MEMBER information
+
+```
+Respond with:
+{
+    "intent": "The user wants to know which documents have Falher MEMBER Information",
+    "search_query": "documents that have FALHER MEMBER Information"
+}
+
 user:
 Return the search query for the messages in the following conversation:
 {{#conversation}}

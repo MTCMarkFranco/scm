@@ -50,7 +50,7 @@ if __name__ == "__main__":
         "--query",
         type=str,
         help="Query to use to search product",
-        default="What were the material number of units for the surface hole using Alkapam A1103D for the job completed in Alberta on December 13, 2013?",
+        default="show me the files related to FALHER MEMBER formation?",
     )
     parser.add_argument(
         "--enable-telemetry",
