@@ -108,6 +108,18 @@ Respond with:
     "search_query": "spud date well ATH HZ Simon"
 }
 
+Example 8:
+With a conversation like below:
+```
+ - user: What were the material number of units for the surface hole using Alkapam A1103D for the job completed in Alberta on December 13, 2013?
+ - assistant: For the surface hole using Alkapam A1103D on the job completed in Alberta on December 13, 2013, the document indicates that 10 units of Alkapam A1103D were used.
+```
+Respond with:
+{
+    "intent": "The user wants to know the number of units for surface hole actuals for a product listed as Alkapam A1103D.",
+    "search_query": "surface hole actual product Alkapam A1103D December 13 2013"
+}
+
 user:
 Return the search query for the messages in the following conversation:
 {{#conversation}}

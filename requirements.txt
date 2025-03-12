@@ -6,3 +6,4 @@ pandas
 python-dotenv
 opentelemetry-api
 azure.monitor.opentelemetry
+azure.ai.evaluation
