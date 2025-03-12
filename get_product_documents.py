@@ -44,6 +44,10 @@ def get_product_documents(messages: list, context: dict = None) -> dict:
 
     overrides = context.get("overrides", {})
     top = overrides.get("top", 5)
+    query_type = overrides.get("queryType", "semantic")
+    semantic_configuration = overrides.get("semanticConfiguration", "vector-wcm-semantic-configuration")
+    select_fields = overrides.get("select", "title,chunk,metadata_storage_path,metadata_storage_name,metadata_creation_date")
+    search_mode = overrides.get("searchMode", "all")
 
     # generate a search query from the chat messages
     intent_prompty = PromptTemplate.from_prompty(Path(ASSET_PATH) / "intent_mapping.prompty")
@@ -62,10 +66,25 @@ def get_product_documents(messages: list, context: dict = None) -> dict:
     search_vector = embedding.data[0].embedding
 
     # search the index for products matching the search query
-    vector_query = VectorizedQuery(vector=search_vector, k_nearest_neighbors=top, fields="text_vector")
+    vector_queries = [  
+        {  
+            "kind": "text",  
+            "text": "{search_vector}",  
+            "fields": "text_vector",  
+            "k": 5,  
+            "threshold": {"kind": "vectorSimilarity", "value": 0.55}  
+        }  
+        ]  
 
     search_results = search_client.search(
-        search_text=search_query, vector_queries=[vector_query], select=["chunk", "metadata_storage_path", "metadata_creation_date", "title"]
+        search_text=search_query,
+        vector_queries=vector_queries,
+        query_type=query_type,
+        semantic_configuration_name=semantic_configuration,
+        select=select_fields,
+        search_mode=search_mode,
+        top=top,
+        include_total_count=True
     )
 
     documents = [
@@ -110,7 +129,7 @@ if __name__ == "__main__":
         "--query",
         type=str,
         help="Query to use to search product",
-        default="what is the hole size for for the second intermediate for ajob performed in Alberta with a total depth of 5301?",
+        default="what is the actual surface hole for Alkapam  A1103D for the job completed in Alberta in december 13 2013?",
     )
 
     args = parser.parse_args()
