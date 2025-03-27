@@ -8,3 +8,4 @@ opentelemetry-api
 azure.monitor.opentelemetry
 azure.ai.evaluation
 azure-ai-evaluation[remote]
+PyJWT

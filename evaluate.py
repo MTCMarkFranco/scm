@@ -1,4 +1,5 @@
 import os
+import jwt.utils
 import pandas as pd
 from azure.ai.projects import AIProjectClient
 from azure.ai.projects.models import ConnectionType
@@ -9,12 +10,28 @@ from chat_with_products import chat_with_products
 
 # load environment variables from the .env file at the root of this repo
 from dotenv import load_dotenv
+import jwt  # Import the jwt module from the PyJWT library
+
+# use only the AZ CLI Credentials (Change for your needs)
+credential = DefaultAzureCredential(
+    exclude_environment_credential=True,
+    exclude_managed_identity_credential=True,
+    exclude_shared_token_cache_credential=True,
+    exclude_visual_studio_credential=True,
+    exclude_visual_studio_code_credential=True,
+    exclude_interactive_browser_credential=True,
+)
+
+# DEBUG: Show which Entra ID User is running the evaluation
+token = credential.get_token("https://management.azure.com/.default").token
+upn = (jwt.decode(token, options={"verify_signature": False})).get("upn")
+print(f"Running evaluation under the context of this identity: {upn}")
 
 load_dotenv()
 
 # create a project client using environment variables loaded from the .env file
 project = AIProjectClient.from_connection_string(
-    conn_str=os.environ["AIPROJECT_CONNECTION_STRING"], credential=DefaultAzureCredential()
+    conn_str=os.environ["AIPROJECT_CONNECTION_STRING"], credential=credential
 )
 
 connection = project.connections.get_default(connection_type=ConnectionType.AZURE_OPEN_AI, include_credentials=True)
